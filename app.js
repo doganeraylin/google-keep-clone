@@ -1,6 +1,9 @@
 class App {
     constructor() {
-        this.notes = [];
+        this.notes = JSON.parse(localStorage.getItem('notes')) || [];
+        this.title = "";
+        this.text = "";
+        this.id = "";
 
         this.placeholder = document.querySelector('#placeholder');
         this.form = document.querySelector("#form");
@@ -132,6 +135,22 @@ class App {
         this.id = $selectedNote.dataset.id;
     }
 
+    deleteNote(event) {
+        event.stopPropagation();
+        if (!event.target.matches('.toolbar-delete')) return;
+        const id = event.target.dataset.id;
+        this.notes = this.notes.filter(note => note.id !== Number(id));
+        this.displayNotes();
+    }
+    
+    render() {
+        this.saveNotes();
+        this.displayNotes();  
+      }
+      
+      saveNotes() {
+        localStorage.setItem('notes', JSON.stringify(this.notes))  
+      }
 
     displayNotes() {
      const hasNotes = this.notes.length > 0;  
