@@ -79,6 +79,20 @@ class App {
         this.$modal.classList.toggle('open-modal');
     }
 
+    openTooltip(event) {
+        if (!event.target.matches('.toolbar-color')) return;
+        this.id = event.target.dataset.id; 
+        const noteCoords = event.target.getBoundingClientRect();
+        const horizontal = noteCoords.left;
+        const vertical = window.scrollY - 20;
+        this.$colorTooltip.style.transform = `translate(${horizontal}px, ${vertical}px)`;
+        this.$colorTooltip.style.display = 'flex';
+    }
+
+    closeTooltip(event) {
+        if (!event.target.matches('.toolbar-color')) return;
+        this.$colorTooltip.style.display = 'none';  
+    }
 
     addNote({title, text}) {
         const newNote = {
@@ -100,6 +114,13 @@ class App {
             note.id === Number(this.id) ? { ...note, title, text } : note
           );
           this.displayNotes(); 
+    }
+
+    editNoteColor(color) {
+        this.notes = this.notes.map(note =>
+          note.id === Number(this.id) ? { ...note, color } : note
+        );
+        this.displayNotes();
     }
 
     selectNote(event) {
